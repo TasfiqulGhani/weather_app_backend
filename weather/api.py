@@ -8,13 +8,12 @@ from weather.helper import get_wind_direction, get_cache_data, set_cache_data
 WEATHER_API_KEY = os.environ['WEATHER_API_KEY']  # Getting api key fromm secured env file
 
 
-async def call_api(city):
+async def call_api(city,lang):
     async with aiohttp.ClientSession() as session:
         async with session.get(
-                'https://api.openweathermap.org/data/2.5/weather?units=metric&q=' + city + '&appid=' + WEATHER_API_KEY) as api_response:
+                'https://api.openweathermap.org/data/2.5/weather?units=metric&q=' + city + '&appid=' + WEATHER_API_KEY + '&lang='+lang) as api_response:
             data = await api_response.json()
             if api_response.status == 200:
-
                 response = JsonResponse(
                     {
                         "error": False,
@@ -26,7 +25,7 @@ async def call_api(city):
                             "humidity": data['main']['humidity'],
                             "wind_speed": data['wind']['speed'],
                             "description": data['weather'][0]['description'],
-                            "wind_dir": get_wind_direction(data['wind']['deg']),
+                            "wind_dir": get_wind_direction(data['wind']['deg'],lang),
                         },
                         "msg": "Success"
                     }, status=api_response.status
@@ -43,17 +42,19 @@ async def call_api(city):
                 )
 
 
-async def handle_user_request(city):
-    data = get_cache_data(city)
+async def handle_user_request(city, lang):
+    data = get_cache_data(city+lang)
     if data:
         return data
-    return await call_api(city)
+    return await call_api(city,lang)
 
 
 async def get_weather(request):
     city = request.GET.get('city')
+    lang = request.GET.get('lang', 'en')
+
     if city:
-        return await handle_user_request(city)
+        return await handle_user_request(city, lang)
     else:
         return JsonResponse(
             {
