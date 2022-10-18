@@ -15,11 +15,13 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-
+from rest_framework_swagger.views import get_swagger_view
 from weather.api import get_weather
+# from weather.tests import url
 
+schema_view = get_swagger_view(title='Pastebin API')
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('weather/', get_weather, name="getweather"),
-    path('', get_weather, name="home")
+    path('apidoc/', get_swagger_view(title='Weather API Documentation')),
 ]
