@@ -67,7 +67,7 @@ WSGI_APPLICATION = 'conf.wsgi.application'
 DATABASES = {
        'default': {
            'ENGINE': 'djongo',
-           'NAME': 'weather_mongodb',
+           'NAME': 'weather_db',
        }
    }
 

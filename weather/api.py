@@ -1,3 +1,4 @@
+import asyncio
 import os
 
 import aiohttp
@@ -30,7 +31,7 @@ async def call_api(city, lang):
                         "msg": "Success"
                     }, status=api_response.status
                 )
-                set_cache_data(city, response)
+                await set_cache_data(city, response)
                 return response
             else:
                 return JsonResponse(

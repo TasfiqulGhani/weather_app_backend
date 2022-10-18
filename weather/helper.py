@@ -1,6 +1,8 @@
+from asgiref.sync import sync_to_async
 from django.core.cache import cache
 
-CACHE_TIME = 36000000
+from weather.models import Setting
+
 CACHE_ENABLE = True
 
 
@@ -37,8 +39,16 @@ def get_cache_data(key):
         return None
 
 
-def set_cache_data(key, value):
-    cache.set(key, value, CACHE_TIME)
+async def set_cache_data(key, value):
+    cache.set(key, value, await get_cache_time())
+
+
+@sync_to_async
+def get_cache_time():
+    setting = Setting.objects.last()
+    if setting:
+        return setting.cache_time * 60000
+    return 60000
 
 
 def clear_cache():
