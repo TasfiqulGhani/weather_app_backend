@@ -28,7 +28,7 @@ SECRET_KEY = os.environ['SECRET_KEY']  # Getting secret key from secured env fil
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 # Application definition
 
@@ -63,14 +63,20 @@ WSGI_APPLICATION = 'conf.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
-
-DATABASES = {
-       'default': {
-           'ENGINE': 'djongo',
-           'NAME': 'weather_db',
-       }
-   }
-
+ 
+DATABASE = {
+    'default': {
+        'ENGINE': 'djongo',
+        'NAME': 'django_mongodb_docker',
+        'CLIENT': {
+            'host': 'mongodb://mongodb:27017',
+            'username': 'root',
+            'password': 'root',
+            'authSource': 'admin',
+            'authMechanism': 'SCRAM-SHA-1',
+        }
+    }
+}
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
 

@@ -1,0 +1,43 @@
+version: "3.8"
+
+services:
+  django:
+    build: .
+    container_name: django
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - .:/home/app/weather_app_backend
+    ports:
+      - "8000:8000"
+    depends_on:
+      - migration
+
+  mongo:
+    image: mongo
+    restart: always
+    env_file: .env
+    environment:
+      MONGO_INITDB_DATABASE: django_mongodb_docker
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: root
+
+  migration:
+    build: .
+    command: python manage.py migrate
+    volumes:
+      - .:/django_mongodb_docker
+    links:
+      - mongo
+    depends_on:
+      - make_migrations
+
+
+  make_migrations:
+    build: .
+    command: python manage.py makemigrations
+    volumes:
+       - .:/home/app/weather_app_backend
+    links:
+      - mongo
+    depends_on:
+      - mongo
