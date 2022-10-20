@@ -82,7 +82,7 @@ DATABASES = {
             "username": 'root',
             "password": 'example',
             'host': 'mongo',
-            'port': 27018,
+            'port': 27017,
         }
     }
 }

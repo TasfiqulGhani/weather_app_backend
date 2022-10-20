@@ -23,9 +23,8 @@ services:
   mongo:
     image: mongo
     restart: always
-    command: mongod --port 27018
     ports:
-      - "27018:27018"
+      - "27017:27017"
     volumes:
       - ${PWD}/_data/mongo:/data/db
       - ${PWD}/docker/_mongo/fixtures:/import
@@ -34,7 +33,7 @@ services:
       MONGO_INITDB_DATABASE: weather_db
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: example
-      MONGO_INITDB_ROOT_PORT: 27018
+      MONGO_INITDB_ROOT_PORT: 27017
 
 
   mongo-express:
@@ -45,6 +44,6 @@ services:
     environment:
       ME_CONFIG_MONGODB_ADMINUSERNAME: root
       ME_CONFIG_MONGODB_ADMINPASSWORD: example
-      ME_CONFIG_MONGODB_URL: mongodb://root:example@mongo:27018/
+      ME_CONFIG_MONGODB_URL: mongodb://root:example@mongo:27017/
 
 
