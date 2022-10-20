@@ -52,6 +52,14 @@ async def handle_user_request(city, lang):
 
 @api_view(['get'])
 async def get_weather(request):
+    """
+    Parameters :
+	--
+	city: Write any city name here
+	lang: You can choose en , de or fr .
+
+    """
+
     city = request.GET.get('city')
     lang = request.GET.get('lang', 'en')
 

@@ -57,4 +57,8 @@ User can enter the city name  which he wants to know the current weather.
 
 ##### API Doc:
 Follow the link for the API Documentation :
+http://127.0.0.1:8000/apidoc/
 
+##### Credit:
+
+Weather Data Source : [Open Weather Map](http://openweathermap.org "Open Weather Map")
