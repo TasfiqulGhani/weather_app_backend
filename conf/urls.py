@@ -14,14 +14,37 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
+from django.template.defaulttags import url
 from django.urls import path
-from rest_framework_swagger.views import get_swagger_view
-from weather.api import get_weather
-# from weather.tests import url
+from drf_yasg import openapi
+from drf_yasg.views import get_schema_view
+from rest_framework import permissions
 
-schema_view = get_swagger_view(title='Pastebin API')
+
+# from weather.tests import url
+from weather.api import get_weather
+
+schema_view = get_schema_view(
+    openapi.Info(
+        title="Weather API",
+        default_version='v1',
+        description="Weather API description",
+        terms_of_service="https://www.google.com/policies/terms/",
+        contact=openapi.Contact(email="contact@snippets.local"),
+        license=openapi.License(name="BSD License"),
+    ),
+    public=True,
+    permission_classes=[permissions.AllowAny],
+)
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('weather/', get_weather, name="getweather"),
-    path('apidoc/', get_swagger_view(title='Weather API Documentation')),
+    path('apidoc/', schema_view.with_ui('swagger', cache_timeout=0)),
+
 ]
+
+# Admin Site Config
+admin.sites.AdminSite.site_header = 'Weather App'
+admin.sites.AdminSite.site_title = 'Weather App '
+admin.sites.AdminSite.index_title = 'Weather App'

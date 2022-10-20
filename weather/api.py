@@ -1,8 +1,8 @@
-import asyncio
 import os
 
 import aiohttp
-from django.http import JsonResponse
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
 
 from weather.helper import get_wind_direction, get_cache_data, set_cache_data
 
@@ -15,7 +15,7 @@ async def call_api(city, lang):
                 'https://api.openweathermap.org/data/2.5/weather?units=metric&q=' + city + '&appid=' + WEATHER_API_KEY + '&lang=' + lang) as api_response:
             data = await api_response.json()
             if api_response.status == 200:
-                response = JsonResponse(
+                response = Response(
                     {
                         "error": False,
                         "result": {
@@ -34,7 +34,7 @@ async def call_api(city, lang):
                 await set_cache_data(city, response)
                 return response
             else:
-                return JsonResponse(
+                return Response(
                     {
                         "error": True,
                         "result": None,
@@ -50,15 +50,15 @@ async def handle_user_request(city, lang):
     return await call_api(city, lang)
 
 
+@api_view(['get'])
 async def get_weather(request):
-
     city = request.GET.get('city')
     lang = request.GET.get('lang', 'en')
 
     if city:
         return await handle_user_request(city, lang)
     else:
-        return JsonResponse(
+        return Response(
             {
                 "error": True,
                 "result": None,
