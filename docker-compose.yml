@@ -1,6 +1,7 @@
-version: "3.8"
+version: '3.1'
 
 services:
+
   django:
     build: .
     container_name: django
@@ -12,32 +13,44 @@ services:
     depends_on:
       - migration
 
+  migration:
+    build: .
+    image: weather_app_backend
+    command: python manage.py migrate
+    depends_on:
+      - mongo
+
   mongo:
     image: mongo
     restart: always
-    env_file: .env
+    ports:
+      - "27017:27017"
+    volumes:
+      - ${PWD}/_data/mongo:/data/db
+      - ${PWD}/docker/_mongo/fixtures:/import
+      - ${PWD}/docker/_mongo/scripts/init.sh:/docker-entrypoint-initdb.d/setup.sh
     environment:
-      MONGO_INITDB_DATABASE: django_mongodb_docker
+      MONGO_INITDB_DATABASE: weather_db
       MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: root
-
-  migration:
-    build: .
-    command: python manage.py migrate
-    volumes:
-      - .:/django_mongodb_docker
-    links:
-      - mongo
-    depends_on:
-      - make_migrations
+      MONGO_INITDB_ROOT_PASSWORD: example
 
 
-  make_migrations:
-    build: .
-    command: python manage.py makemigrations
-    volumes:
-       - .:/home/app/weather_app_backend
-    links:
-      - mongo
-    depends_on:
-      - mongo
+  mongo-express:
+    image: mongo-express
+    restart: always
+    ports:
+      - 8081:8081
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: root
+      ME_CONFIG_MONGODB_ADMINPASSWORD: example
+      ME_CONFIG_MONGODB_URL: mongodb://root:example@mongo:27017/
+
+    #volumes:
+    #  dolumes:
+    ##  data:
+    ##    external: trueata:
+#    external: true
+
+
+
+

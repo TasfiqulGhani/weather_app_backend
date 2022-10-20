@@ -57,23 +57,23 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'conf.urls'
 
-
-
 WSGI_APPLICATION = 'conf.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
- 
-DATABASE = {
+
+
+
+
+DATABASES = {
     'default': {
         'ENGINE': 'djongo',
-        'NAME': 'django_mongodb_docker',
+        'NAME': 'weather_db',
         'CLIENT': {
-            'host': 'mongodb://mongodb:27017',
-            'username': 'root',
-            'password': 'root',
-            'authSource': 'admin',
-            'authMechanism': 'SCRAM-SHA-1',
+            "username": 'root',
+            "password": 'example',
+            'host': 'mongo',
+            'port': 27017,
         }
     }
 }
@@ -106,7 +106,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
             ],
-            'libraries' : {
+            'libraries': {
                 'staticfiles': 'django.templatetags.static',
             }
         },
