@@ -78,12 +78,12 @@ DATABASES = {
     'default': {
         'ENGINE': 'djongo',
         'NAME': 'weather_db',
-        # 'CLIENT': {
-        #     "username": 'root',
-        #     "password": 'example',
-        #     'host': 'mongo',
-        #     'port': 27018,
-        # }
+        'CLIENT': {
+            "username": 'root',
+            "password": 'example',
+            'host': 'mongo',
+            'port': 27018,
+        }
     }
 }
 # Password validation
